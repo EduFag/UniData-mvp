@@ -3,7 +3,7 @@ import json
 from contrato import ProntuarioContract
 
 # Carrega o sistema de prontuários (externo ao contrato)
-with open("dados/prontuarios.json") as f:
+with open("tests/data/prontuarios.json") as f:
     banco_prontuarios = json.load(f)
 
 # Instancia "smart contract"
