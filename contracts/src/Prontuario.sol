@@ -55,9 +55,13 @@ contract ProntuarioUnificado {
     }
 
     // Paciente se registra (opcional)
-    function registrarPaciente() external {
-        pacientesRegistrados[msg.sender] = true;
+    function registrarPaciente(address paciente) external {
+        require(paciente != address(0), "Endereco invalido");
+        require(!pacientesRegistrados[paciente], "Paciente ja registrado");
+
+        pacientesRegistrados[paciente] = true;
     }
+
 
     // Paciente dá/retira consentimento a um profissional
     function setConsentimento(address profissional, bool permitido) external {
