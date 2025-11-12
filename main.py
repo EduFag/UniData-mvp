@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import prontuario_root  # importa o arquivo que tem as rotas
+from API.routes import prontuario_root  # importa o arquivo que tem as rotas
 
 app = FastAPI()
 
