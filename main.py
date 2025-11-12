@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from roots.prontuario_root import router as prontuario_router
+from routes import prontuario_root  # importa o arquivo que tem as rotas
 
-app = FastAPI(title="Prontuário Blockchain API")
+app = FastAPI()
 
-app.include_router(prontuario_router, prefix="/prontuarios", tags=["Prontuários"])
+# adiciona as rotas do arquivo base.py
+app.include_router(prontuario_root.router)
