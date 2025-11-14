@@ -72,7 +72,7 @@ contract ProntuarioUnificado {
 
     // --- CRUD mínimo ---
     // Cria um novo prontuario (somente profissional autorizado)
-    function criarProntuario(address paciente, string calldata cid) external somenteProfissional returns (uint256) {
+    function registrarProntuario(address paciente, string calldata cid) external somenteProfissional returns (uint256) {
         require(pacientesRegistrados[paciente], "Paciente nao registrado");
 
         // opcional: conferir se profissional tem consentimento (ou paciente pode delegar previamente)

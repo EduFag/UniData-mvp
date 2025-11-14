@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from config import web3, api_signer, contrato
+from services.transaction_service import enviar_transacao
 
 router = APIRouter()
 
@@ -7,16 +8,19 @@ router = APIRouter()
 def root():
     return {"mensagem": "Bem vindo"}
 
-@router.post("/registrar")
-def registrar_paciente(endereco_paciente):
-    tx = contrato.functions.registrarPaciente(endereco_paciente).build_transaction({
-        "from": api_signer.address,
-        "nonce": web3.eth.get_transaction_count(api_signer.address),
-        "gas": 300000,
-        "gasPrice": web3.to_wei("5", "gwei"),
-    })
+@router.post("/registrar-prontuario")
+def registrar_prontuario(endereco_paciente: str, cid: str):
+    """
+    Chama a função registrarProntuario do contrato.
+    A API assina a transação.
+    """
+    func = contrato.functions.criarProntuario(
+        endereco_paciente,  # parâmetro 1 (address)
+        cid                 # parâmetro 2 (string)
+    )
 
-    signed_tx = api_signer.sign_transaction(tx)
-    tx_hash = web3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    return {"tx_hash": tx_hash.hex()}
+    return enviar_transacao(func, api_signer, web3)
+
+
+
 
