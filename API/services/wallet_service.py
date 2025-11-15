@@ -22,19 +22,19 @@ def _salvar_arquivo(data):
         json.dump(data, f, indent=4)
 
 
-def criar_carteira(nome_usuario: str):
+def criar_carteira(cpf: str):
     """
     Cria uma nova carteira Ethereum e salva no arquivo local.
     Retorna o endereço público e a chave privada.
     """
     data = _carregar_arquivo()
 
-    if nome_usuario in data:
+    if cpf in data:
         raise ValueError("Usuário já possui uma carteira registrada.")
 
     conta = Account.create()
 
-    data[nome_usuario] = {
+    data[cpf] = {
         "endereco": conta.address,
         "chave_privada": conta.key.hex()
     }
@@ -43,7 +43,7 @@ def criar_carteira(nome_usuario: str):
 
     return {
         "mensagem": "Carteira criada com sucesso!",
-        "usuario": nome_usuario,
+        "usuario": cpf,
         "endereco": conta.address
     }
 

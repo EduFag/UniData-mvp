@@ -1,12 +1,18 @@
 from fastapi import APIRouter
 from config import web3, api_signer, contrato
 from services.transaction_service import enviar_transacao
+from services.wallet_service import *
 
 router = APIRouter()
 
 @router.get("/")
 def root():
     return {"mensagem": "Bem vindo"}
+
+@router.post("/cadastrar-paciente")
+def cadastrar_paciente(cpf: str):
+    criar_carteira(cpf)
+
 
 @router.post("/registrar-prontuario")
 def registrar_prontuario(endereco_paciente: str, cid: str):
