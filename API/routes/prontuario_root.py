@@ -13,6 +13,15 @@ def root():
 def cadastrar_paciente(cpf: str):
     criar_carteira(cpf)
 
+    carteira = obter_carteira(cpf)
+    address = carteira["endereco"]
+
+    func = contrato.functions.registrarPaciente(
+        address
+    )
+
+    return enviar_transacao(func, api_signer, web3)
+
 
 @router.post("/registrar-prontuario")
 def registrar_prontuario(endereco_paciente: str, cid: str):
@@ -23,6 +32,16 @@ def registrar_prontuario(endereco_paciente: str, cid: str):
     func = contrato.functions.criarProntuario(
         endereco_paciente,  # parâmetro 1 (address)
         cid                 # parâmetro 2 (string)
+    )
+
+    return enviar_transacao(func, api_signer, web3)
+
+@router.post("/atualizar-prontuario")
+def atualizar_prontuario(id, cid, address_profissional):
+    func = contrato.functions.atualizarProntuario(
+        id,
+        cid,
+        address_profissional
     )
 
     return enviar_transacao(func, api_signer, web3)

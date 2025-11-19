@@ -3,7 +3,7 @@ import json
 import os
 
 # Caminho para armazenar as carteiras localmente
-CARTEIRAS_PATH = "API/data/carteiras.json"
+CARTEIRAS_PATH = "data/carteiras.json"
 
 
 def _carregar_arquivo():
