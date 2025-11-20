@@ -22,6 +22,24 @@ def cadastrar_paciente(cpf: str):
 
     return enviar_transacao(func, api_signer, web3)
 
+@router.post("/autorizar-profissional")
+def autorizar_profissional(address_profissional: str, bool: True):
+    func = contrato.functions.setProfissionalAutorizado(
+        address_profissional,
+        bool
+    )
+
+    return enviar_transacao(func, api_signer, web3)
+
+@router.post("/set-consentimento")
+def set_consentimento(address_paciente: str, address_profissional: str, bool: True):
+    func = contrato.functions.setConsentimento(
+        address_paciente,
+        address_profissional,
+        bool
+    )
+
+    return enviar_transacao(func, api_signer, web3)
 
 @router.post("/registrar-prontuario")
 def registrar_prontuario(endereco_paciente: str, cid: str):
@@ -37,7 +55,7 @@ def registrar_prontuario(endereco_paciente: str, cid: str):
     return enviar_transacao(func, api_signer, web3)
 
 @router.post("/atualizar-prontuario")
-def atualizar_prontuario(id, cid, address_profissional):
+def atualizar_prontuario(id: int, cid: str, address_profissional: str):
     func = contrato.functions.atualizarProntuario(
         id,
         cid,
@@ -46,6 +64,21 @@ def atualizar_prontuario(id, cid, address_profissional):
 
     return enviar_transacao(func, api_signer, web3)
 
+@router.get("/listar-prontuarios")
+def listar_prontuarios(address_paciente: str):
+    try:
+        prontuarios = contrato.functions.listarProntuarios(address_paciente).call()
+        return {"prontuarios": prontuarios}
+    except Exception as e:
+        return {"erro": str(e)}
+    
+@router.get("/get-prontuario")
+def get_prontuario(id: int):
+    try:
+        prontuario = contrato.functions.getProntuario(id).call()
+        return {"prontuario": prontuario}
+    except Exception as e:
+        return {"erro": str(e)}
 
 
 
