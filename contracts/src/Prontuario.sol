@@ -63,10 +63,10 @@ contract ProntuarioUnificado {
     }
 
     // Paciente dá/retira consentimento a um profissional
-    function setConsentimento(address profissional, bool permitido) external {
-        require(pacientesRegistrados[msg.sender], "Paciente nao registrado");
-        consentimento[msg.sender][profissional] = permitido;
-        emit ConsentimentoAlterado(msg.sender, profissional, permitido);
+    function setConsentimento(address paciente, address profissional, bool permitido) external {
+        require(pacientesRegistrados[paciente], "Paciente nao registrado");
+        consentimento[paciente][profissional] = permitido;
+        emit ConsentimentoAlterado(paciente, profissional, permitido);
     }
 
     // Cria um novo prontuario (somente profissional autorizado)
