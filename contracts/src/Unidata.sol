@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-/// @title ProntuarioUnificado
-contract ProntuarioUnificado {
+/// @title Unidata
+contract Unidata {
 
     address public admin; // dono do sistema (pode ser multisig em produção)
 
