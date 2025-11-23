@@ -9,17 +9,25 @@ router = APIRouter()
 def root():
     return {"mensagem": "Bem vindo"}
 
-@router.post("/cadastrar-paciente")
-def cadastrar_paciente(cpf: str):
+router.post("/gerar-carteira")
+def gerar_carteira(cpf):
     criar_carteira(cpf)
 
+    carteira = obter_carteira(cpf)
+    address = carteira["endereco"]
+
+    return {"address": address}
+
+
+@router.post("/cadastrar-paciente")
+def cadastrar_paciente(cpf: str):
     carteira = obter_carteira(cpf)
     address = carteira["endereco"]
 
     func = contrato.functions.registrarPaciente(
         address
     )
-
+    
     return enviar_transacao(func, api_signer, web3)
 
 @router.post("/autorizar-profissional")
