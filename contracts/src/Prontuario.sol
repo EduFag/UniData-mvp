@@ -73,7 +73,7 @@ contract ProntuarioUnificado {
     function registrarProntuario(address paciente, string calldata cid, address profissional) external somenteProfissional returns (uint256) {
         require(pacientesRegistrados[paciente], "Paciente nao registrado");
 
-        require(consentimento[paciente][msg.sender] == true, "Profissional sem consentimento do paciente");
+        require(consentimento[paciente][profissional] == true, "Profissional sem consentimento do paciente");
 
         uint256 id = nextId++;
         prontuarios[id] = Prontuario({
@@ -93,7 +93,7 @@ contract ProntuarioUnificado {
         Prontuario storage p = prontuarios[id];
 
         require(p.paciente != address(0), "Prontuario invalido");
-        require(consentimento[p.paciente][msg.sender] == true, "Profissional sem consentimento");
+        require(consentimento[p.paciente][profissional] == true, "Profissional sem consentimento");
 
         p.cid = cid;
         p.updatedAt = block.timestamp;
