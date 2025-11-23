@@ -1,9 +1,12 @@
 from eth_account import Account
 import json
 import os
+from pathlib import Path
 
 # Caminho para armazenar as carteiras localmente
-CARTEIRAS_PATH = "data/carteiras.json"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+CARTEIRAS_PATH = DATA_DIR / "carteiras.json"
 
 
 def _carregar_arquivo():
