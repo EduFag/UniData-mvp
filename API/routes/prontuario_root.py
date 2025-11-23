@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from config import web3, api_signer, contrato
-from services.transaction_service import enviar_transacao
-from services.wallet_service import *
+from API.config import web3, api_signer, contrato
+from API.services.transaction_service import enviar_transacao
+from API.services.wallet_service import *
 
 router = APIRouter()
 
@@ -31,20 +31,20 @@ def cadastrar_paciente(cpf: str):
     return enviar_transacao(func, api_signer, web3)
 
 @router.post("/autorizar-profissional")
-def autorizar_profissional(address_profissional: str, bool: True):
+def autorizar_profissional(address_profissional: str, autorizado: bool):
     func = contrato.functions.setProfissionalAutorizado(
         address_profissional,
-        bool
+        autorizado
     )
 
     return enviar_transacao(func, api_signer, web3)
 
 @router.post("/set-consentimento")
-def set_consentimento(address_paciente: str, address_profissional: str, bool: True):
+def set_consentimento(address_paciente: str, address_profissional: str, consentimento: bool):
     func = contrato.functions.setConsentimento(
         address_paciente,
         address_profissional,
-        bool
+        consentimento
     )
 
     return enviar_transacao(func, api_signer, web3)

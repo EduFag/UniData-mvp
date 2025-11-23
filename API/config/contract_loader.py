@@ -8,7 +8,8 @@ def load_contract(contract_name: str):
     abi_path = Path(__file__).parent.parent / "contracts" / "abi" / f"{contract_name}.json"
     address_path = Path(__file__).parent.parent / "contracts" / "addresses.json"
     
-    abi = json.loads(abi_path.read_text())
+    abi_full = json.loads(abi_path.read_text())
+    abi = abi_full["abi"]
     addresses = json.loads(address_path.read_text())
     contract_address = addresses.get(contract_name)
 
