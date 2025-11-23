@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import CadastroForm, LoginForm
 from .models import Profissional
+from django.contrib.auth import logout as django_logout
 import requests
 
 API_URL = "http://localhost:8001"  # exemplo
 
-def cadastro_view(request):
+def cadastro(request):
     if request.method == "POST":
         form = CadastroForm(request.POST)
 
@@ -36,10 +37,9 @@ def cadastro_view(request):
     else:
         form = CadastroForm()
 
-    return render(request, "cadastro.html", {"form": form})
+    return render(request, "app_profissional/cadastro.html", {"form": form})
 
-
-def login_view(request):
+def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -48,8 +48,11 @@ def login_view(request):
     else:
         form = LoginForm()
 
-    return render(request, "login.html", {"form": form})
+    return render(request, "app_profissional/login.html", {"form": form})
 
+def logout(request):
+    django_logout(request)
+    return redirect("login")
 
 def autorizar_profissional(request, profissional_id):
     prof = Profissional.objects.get(id=profissional_id)
@@ -64,4 +67,5 @@ def autorizar_profissional(request, profissional_id):
         prof.save()
 
     return redirect("painel_admin")
+
 
