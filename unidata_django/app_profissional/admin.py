@@ -3,7 +3,7 @@ from .models import Profissional
 import requests
 from django.contrib import messages
 
-API_URL = "http://localhost:8001"
+API_URL = "http://localhost:8000"
 
 # Register your models here.
 
@@ -27,7 +27,6 @@ class ProfissionalAdmin(admin.ModelAdmin):
 
         # Caso o admin tenha marcado "autorizado" agora
         if not autorizado_anterior and obj.autorizado:
-            # Chamar sua API
             resp = requests.post(f"{API_URL}/autorizar-profissional", json={
                 "address_profissional": obj.endereco_eth,
                 "bool": True

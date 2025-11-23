@@ -10,7 +10,7 @@ class LoginForm(forms.Form):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
 
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=email, password=password)
 
         if not user:
             raise forms.ValidationError("Credenciais inválidas")

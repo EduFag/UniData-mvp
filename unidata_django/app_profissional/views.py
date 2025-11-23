@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
 from .forms import CadastroForm, LoginForm
 from .models import Profissional
 from django.contrib.auth import logout as django_logout
 import requests
 
-API_URL = "http://localhost:8001"  # exemplo
+API_URL = "http://localhost:8000"
 
 def cadastro(request):
     if request.method == "POST":
@@ -15,19 +15,21 @@ def cadastro(request):
             profissional = form.save(commit=False)
             profissional.set_password(form.cleaned_data["password"])
 
-            # 1. Cria a carteira via API
-            resp = requests.post(f"{API_URL}/gerar-carteira", json={
-                "cpf": profissional.email  # ou outro identificador único
-            })
+            endpoint = f"{API_URL}/gerar-carteira"
 
-            if resp.status_code != 200:
+            payload = {"cpf": str(profissional.cpf)}
+
+            # 1. Cria a carteira via API
+            resp = requests.post(endpoint, json=payload)
+
+            if resp.status_code != 201:
                 form.add_error(None, "Erro ao gerar carteira na API.")
-                return render(request, "cadastro.html", {"form": form})
+                return render(request, "app_profissional/cadastro.html", {"form": form})
 
             carteira = resp.json()
 
             # 2. Salva endereço ETH no Django
-            profissional.endereco_eth = carteira["endereco"]
+            profissional.endereco_eth = carteira["address"]
 
             # 3. profissional.autorizado = False (não pode se autorizar)
             profissional.save()
@@ -43,7 +45,7 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            login(request, form.user)
+            auth_login(request, form.user)
             return redirect("dashboard")
     else:
         form = LoginForm()
