@@ -20,7 +20,7 @@ router = APIRouter()
 
 @router.get("/", summary="Health Check")
 def root():
-    return {"status": "API Online", "servico": "SalusChain Flow"}
+    return {"status": "API Online", "servico": "Unidata"}
 
 @router.post("/gerar-carteira", status_code=201)
 def endpoint_gerar_carteira(dados: CarteiraRequest):
