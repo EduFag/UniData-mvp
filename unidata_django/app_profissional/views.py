@@ -53,19 +53,3 @@ def login(request):
 def logout(request):
     django_logout(request)
     return redirect("login")
-
-def autorizar_profissional(request, profissional_id):
-    prof = Profissional.objects.get(id=profissional_id)
-
-    resp = requests.post(f"{API_URL}/autorizar-profissional", json={
-        "address_profissional": prof.endereco_eth,
-        "bool": True
-    })
-
-    if resp.status_code == 200:
-        prof.autorizado = True
-        prof.save()
-
-    return redirect("painel_admin")
-
-
