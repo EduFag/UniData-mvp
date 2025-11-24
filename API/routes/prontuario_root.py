@@ -22,6 +22,7 @@ router = APIRouter()
 def root():
     return {"status": "API Online", "servico": "Unidata"}
 
+
 @router.post("/gerar-carteira", status_code=201)
 def endpoint_gerar_carteira(dados: CarteiraRequest):
     try:
@@ -34,6 +35,7 @@ def endpoint_gerar_carteira(dados: CarteiraRequest):
         return {"address": carteira["endereco"], "mensagem": "Carteira criada"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
 
 @router.post("/cadastrar-paciente", response_model=TxResponse)
 def endpoint_cadastrar_paciente(dados: PacienteRequest):
@@ -58,6 +60,7 @@ def endpoint_cadastrar_paciente(dados: PacienteRequest):
         
     return resultado
 
+
 @router.post("/autorizar-profissional", response_model=TxResponse)
 def endpoint_autorizar_profissional(dados: ProfissionalAuthRequest):
     func = contrato.functions.setProfissionalAutorizado(
@@ -71,19 +74,47 @@ def endpoint_autorizar_profissional(dados: ProfissionalAuthRequest):
     
     return resultado
 
-@router.post("/criar-prontuario", response_model=TxResponse)
-def endpoint_criar_prontuario(dados: ProntuarioRequest):
-    func = contrato.functions.criarProntuario(
-        dados.endereco_paciente,
-        dados.cid,
-        dados.endereco_profissional
-    )
-    resultado = enviar_transacao(func, api_signer, web3)
+
+@router.get("/checar-consentimento")
+def endpoint_checar_consentimento(address_paciente: str, address_profissional: str):
+    """ Verifica na blockchain se o médico tem permissão """
+    try:
+        # Mapeamento: consentimento[paciente][profissional]
+        permitido = contrato.functions.consentimento(address_paciente, address_profissional).call()
+        return {"autorizado": permitido}
+    except Exception as e:
+        return {"autorizado": False, "erro": str(e)}
     
-    if "erro" in resultado:
-        raise HTTPException(status_code=500, detail=resultado["erro"])
+
+@router.post("/registrar-prontuario", response_model=TxResponse)
+def endpoint_registrar_prontuario(dados: ProntuarioRequest):
+    try:
+        # Lógica de decisão
+        if dados.id and dados.id > 0:
+            # É ATUALIZAÇÃO
+            func = contrato.functions.atualizarProntuario(
+                dados.id, 
+                dados.cid, 
+                dados.endereco_profissional
+            )
+        else:
+            # É CRIAÇÃO
+            func = contrato.functions.criarProntuario(
+                dados.endereco_paciente, 
+                dados.cid, 
+                dados.endereco_profissional
+            )
+
+        resultado = enviar_transacao(func, api_signer, web3)
+        
+        if "erro" in resultado:
+            raise HTTPException(status_code=500, detail=resultado["erro"])
+            
+        return resultado
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
-    return resultado
 
 @router.get("/listar-prontuarios")
 def listar_prontuarios(address_paciente: str):
@@ -100,6 +131,7 @@ def listar_prontuarios(address_paciente: str):
         return {"prontuarios": prontuarios_formatados}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao ler blockchain: {str(e)}")
+    
 
 @router.get("/get-prontuario/{id_prontuario}")
 def get_prontuario(id_prontuario: int):
