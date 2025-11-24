@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Painel Médico{% endblock %}</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f5f9; color: #334155; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 240px; height: 100vh; position: fixed; background: #1e293b; color: #fff; padding: 20px; box-sizing: border-box;}
+        .sidebar h2 { margin-top: 0; font-size: 22px; margin-bottom: 30px; border-bottom: 1px solid #334155; padding-bottom: 10px;}
+        .sidebar a { display: block; color: #cbd5e1; padding: 12px; text-decoration: none; border-radius: 8px; margin-top: 5px; transition: 0.2s;}
+        .sidebar a:hover { background: #334155; color: white; }
+        .sidebar a.active { background: #2563eb; color: white; }
+
+        /* CONTENT */
+        .content { margin-left: 240px; padding: 30px; }
+
+        /* UTILS */
+        .card { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        
+        .btn { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; text-decoration: none; display: inline-block;}
+        .btn-blue { background: #2563eb; color: #fff; }
+        .btn-blue:hover { background: #1d4ed8; }
+        .btn-green { background: #16a34a; color: #fff; }
+        .btn-red { background: #dc2626; color: #fff; }
+        
+        /* Inputs */
+        input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit;}
+        
+        /* Alerts */
+        .messages { list-style: none; padding: 0; margin-bottom: 20px; }
+        .alert { padding: 15px; border-radius: 6px; margin-bottom: 10px; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .alert-warning { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Unidata</h2>
+        <a href="{% url 'dashboard_profissional' %}" class="{% if request.resolver_match.url_name == 'dashboard_profissional' %}active{% endif %}">Meus Pacientes</a>
+        <a href="#">Configurações</a>
+        <a href="{% url 'logout_profissional' %}" style="color:#f87171; margin-top: 50px;">Sair do Sistema</a>
+    </div>
+
+    <div class="content">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

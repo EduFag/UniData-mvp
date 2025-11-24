@@ -1,180 +1,60 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Painel do Médico</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f1f1f1;
-        }
+{% extends 'base_dashboard.html' %}
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 240px;
-            height: 100vh;
-            position: fixed;
-            background: #1e293b;
-            color: #fff;
-            padding: 20px;
-        }
+{% block title %}Dashboard - Unidata{% endblock %}
 
-        .sidebar h2 {
-            margin-top: 0;
-            font-size: 22px;
-        }
+{% block content %}
 
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            padding: 12px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .sidebar a:hover {
-            background: #334155;
-        }
-
-        /* MAIN CONTENT */
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            margin: 0;
-        }
-
-        .patient-list, .record-view {
-            margin-top: 25px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .patient {
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-blue {
-            background: #2563eb;
-            color: #fff;
-        }
-
-        .btn-red {
-            background: #dc2626;
-            color: #fff;
-        }
-
-        .btn-green {
-            background: #16a34a;
-            color: #fff;
-        }
-
-        .record-content textarea {
-            width: 100%;
-            height: 120px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            resize: none;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h2>Painel Médico</h2>
-
-        <a href="#">Pacientes</a>
-        <a href="#">Prontuários</a>
-        <a href="#">Autorização</a>
-        <a href="#">Configurações</a>
-        <a href="#" style="color:#ef4444;">Sair</a>
+    <div class="header">
+        <div>
+            <h1>Olá, {{ profissional.user.first_name }}</h1>
+            <span style="color: #64748b;">CRM: {{ profissional.crm }}</span>
+        </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="content">
-
-        <div class="header">
-            <h1>Bem-vindo, Doutor(a)</h1>
-            <button class="btn btn-blue">Atualizar dados</button>
-        </div>
-
-        <!-- LISTA DE PACIENTES -->
-        <div class="patient-list">
-            <h2>Pacientes</h2>
-
-            <div class="patient">
-                <div>
-                    <strong>João Silva</strong><br>
-                    CPF: 123.456.789-00
-                </div>
-                <div>
-                    <button class="btn btn-green">Abrir prontuário</button>
-                </div>
-            </div>
-
-            <div class="patient">
-                <div>
-                    <strong>Maria Oliveira</strong><br>
-                    CPF: 987.654.321-00
-                </div>
-                <div>
-                    <button class="btn btn-green">Abrir prontuário</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- VISUALIZAÇÃO DO PRONTUÁRIO -->
-        <div class="record-view">
-            <h2>Prontuário</h2>
-
-            <div class="record-content">
-                <p><strong>ID:</strong> 12</p>
-                <p><strong>Paciente:</strong> João Silva</p>
-                <p><strong>CID atual:</strong> A09</p>
-
-                <textarea placeholder="Atualizar anotações do prontuário..."></textarea>
-
-                <div style="margin-top: 15px;">
-                    <button class="btn btn-blue">Atualizar prontuário</button>
-                    <button class="btn btn-red">Remover registro</button>
-                </div>
-            </div>
-        </div>
-
+    <div class="card" style="background: #eff6ff; border: 1px solid #dbeafe;">
+        <h3 style="margin-top: 0; color: #1e3a8a;">Iniciar Novo Atendimento</h3>
+        <p style="font-size: 14px; color: #64748b;">Digite o CPF do paciente para buscar no sistema e abrir o prontuário.</p>
+        
+        <form action="{% url 'buscar_paciente' %}" method="POST" style="display: flex; gap: 10px;">
+            {% csrf_token %}
+            <input type="text" name="cpf" placeholder="CPF do paciente (apenas números)" required>
+            <button type="submit" class="btn btn-blue">Buscar e Abrir</button>
+        </form>
     </div>
 
-</body>
-</html>
+    <div class="card">
+        <h2>Meus Pacientes Recentes</h2>
+        
+        {% if meus_pacientes %}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead>
+                    <tr style="text-align: left; color: #64748b; border-bottom: 2px solid #f1f5f9;">
+                        <th style="padding: 10px;">Nome</th>
+                        <th style="padding: 10px;">CPF</th>
+                        <th style="padding: 10px;">Último Acesso</th>
+                        <th style="padding: 10px;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in meus_pacientes %}
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 15px 10px;"><strong>{{ item.paciente.user.get_full_name }}</strong></td>
+                        <td style="padding: 15px 10px;">{{ item.paciente.cpf }}</td>
+                        <td style="padding: 15px 10px; color: #64748b;">{{ item.data_ultimo_acesso|date:"d/m/Y H:i" }}</td>
+                        <td style="padding: 15px 10px;">
+                            <a href="{% url 'ver_prontuario' item.paciente.id %}" class="btn btn-green" style="padding: 6px 12px; font-size: 13px;">
+                                Acessar Prontuário
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; padding: 20px; color: #94a3b8;">
+                Nenhum paciente vinculado ainda. Use a busca acima para começar.
+            </p>
+        {% endif %}
+    </div>
+
+{% endblock %}

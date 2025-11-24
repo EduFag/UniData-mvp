@@ -44,8 +44,8 @@ def cadastro(request):
             try:
                 resp = requests.post(endpoint, json=payload)
                 
-                # Aceita 200 ou 201 como sucesso
-                if resp.status_code != 201:
+                # Aceita 200
+                if resp.status_code != 200:
                     user.delete()
                     print(f"Erro API: {resp.text}")
                     form.add_error(None, "Erro ao gerar carteira na API.")

@@ -16,18 +16,13 @@
         --shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: var(--bg-light);
-        /* Se quiser o fundo da página inteiro com gradiente, descomente abaixo: */
-        /* background: var(--primary-gradient); min-height: 100vh; */
         color: var(--text-color);
-        margin: 0;
-        padding: 20px;
+        margin: 0; padding: 20px;
     }
 
     /* --- 2. Container e Card Principal --- */
@@ -37,7 +32,7 @@
         background: var(--white);
         border-radius: var(--radius);
         box-shadow: var(--shadow);
-        overflow: hidden; /* Para o header não vazar as bordas */
+        overflow: hidden;
     }
 
     .card-header {
@@ -47,42 +42,22 @@
         text-align: center;
     }
 
-    .card-header h3 {
-        margin: 0;
-        font-weight: 600;
-        font-size: 1.5rem;
-    }
-
-    .card-body {
-        padding: 30px;
-    }
+    .card-header h3 { margin: 0; font-weight: 600; font-size: 1.5rem; }
+    .card-body { padding: 30px; }
 
     /* --- 3. Estilização do Formulário --- */
-    .form-group {
-        margin-bottom: 20px;
-    }
+    .form-group { margin-bottom: 20px; }
 
     label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #555;
+        display: block; margin-bottom: 8px;
+        font-weight: 600; font-size: 0.9rem; color: #555;
     }
 
-    /* Estilo de todos os inputs */
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="date"],
-    select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%; padding: 12px 15px;
+        border: 1px solid #ddd; border-radius: 8px;
+        font-size: 1rem; outline: none;
         transition: border-color 0.3s, box-shadow 0.3s;
-        outline: none;
     }
 
     input:focus {
@@ -90,86 +65,49 @@
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
 
-    /* Grid para colocar campos lado a lado (Nome/CPF, Data/Tel) */
+    /* Grid para colocar campos lado a lado */
     .form-row {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+        grid-template-columns: 1fr 1fr;
         gap: 20px;
     }
 
-    /* Responsividade: Em telas pequenas, vira uma coluna só */
     @media (max-width: 600px) {
-        .form-row {
-            grid-template-columns: 1fr;
-        }
+        .form-row { grid-template-columns: 1fr; }
     }
 
     /* --- 4. Mensagens e Alertas --- */
     .info-box {
-        background-color: #e3f2fd;
-        border-left: 4px solid #2196f3;
-        color: #0d47a1;
-        padding: 15px;
-        border-radius: 4px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        background-color: #e3f2fd; border-left: 4px solid #2196f3;
+        color: #0d47a1; padding: 15px; border-radius: 4px;
+        margin-top: 20px; margin-bottom: 20px;
+        font-size: 0.9rem; line-height: 1.5;
     }
 
     .error-msg {
-        color: var(--danger);
-        font-size: 0.85rem;
-        margin-top: 5px;
-        display: block;
+        color: var(--danger); font-size: 0.85rem; margin-top: 5px; display: block;
     }
 
     .helper-text {
-        font-size: 0.8rem;
-        color: #888;
-        margin-top: 5px;
-        display: block;
+        font-size: 0.8rem; color: #888; margin-top: 5px; display: block;
     }
 
     /* --- 5. Botões --- */
     .btn-container {
-        display: flex;
-        justify-content: flex-end; /* Alinha à direita */
-        gap: 15px;
-        margin-top: 30px;
+        display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;
     }
 
     .btn {
-        padding: 12px 25px;
-        border-radius: 50px;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        border: none;
-        font-size: 1rem;
+        padding: 12px 25px; border-radius: 50px; font-weight: 600;
+        text-decoration: none; cursor: pointer; transition: transform 0.2s;
+        border: none; font-size: 1rem;
     }
 
-    .btn-primary {
-        background: var(--primary-gradient);
-        color: white;
-    }
+    .btn-primary { background: var(--primary-gradient); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-secondary {
-        background: transparent;
-        border: 1px solid #ccc;
-        color: #666;
-    }
-
-    .btn-secondary:hover {
-        background: #f0f0f0;
-        color: #333;
-    }
+    .btn-secondary { background: transparent; border: 1px solid #ccc; color: #666; }
+    .btn-secondary:hover { background: #f0f0f0; color: #333; }
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -181,6 +119,7 @@
 
     <div class="card-body">
         
+        <!-- Bloco de Erros Gerais (ex: Email já existe) -->
         {% if form.non_field_errors %}
             <div class="info-box" style="background-color: #fdecea; border-color: var(--danger); color: var(--danger);">
                 {% for error in form.non_field_errors %}
@@ -192,6 +131,7 @@
         <form method="post">
             {% csrf_token %}
 
+            <!-- LINHA 1: NOME e CPF -->
             <div class="form-row">
                 <div class="form-group">
                     <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }} *</label>
@@ -210,24 +150,7 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.data_nascimento.id_for_label }}">{{ form.data_nascimento.label }} *</label>
-                    {{ form.data_nascimento }}
-                    {% if form.data_nascimento.errors %}
-                        <span class="error-msg">{{ form.data_nascimento.errors.0 }}</span>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <label for="{{ form.telefone.id_for_label }}">{{ form.telefone.label }} *</label>
-                    {{ form.telefone }}
-                    {% if form.telefone.errors %}
-                        <span class="error-msg">{{ form.telefone.errors.0 }}</span>
-                    {% endif %}
-                </div>
-            </div>
-
+            <!-- LINHA 2: EMAIL -->
             <div class="form-group">
                 <label for="{{ form.email.id_for_label }}">{{ form.email.label }} *</label>
                 {{ form.email }}
@@ -237,6 +160,7 @@
                 {% endif %}
             </div>
 
+            <!-- LINHA 3: SENHA -->
             <div class="form-group">
                 <label for="{{ form.password.id_for_label }}">{{ form.password.label }} *</label>
                 {{ form.password }}
@@ -246,6 +170,7 @@
                 {% endif %}
             </div>
 
+            <!-- INFO BOX -->
             <div class="info-box">
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <i class="bi bi-shield-lock-fill" style="font-size: 1.5rem;"></i>
@@ -257,6 +182,7 @@
                 </div>
             </div>
 
+            <!-- BOTÕES -->
             <div class="btn-container">
                 <a href="{% url 'login_paciente' %}" class="btn btn-secondary">
                     Já tenho conta

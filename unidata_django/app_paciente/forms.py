@@ -9,8 +9,6 @@ class CadastroForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="Senha")
     
     cpf = forms.CharField(label="CPF")
-    telefone = forms.CharField(label="Telefone")
-    data_nascimento = forms.CharField(label="Data de Nascimento")
 
     # Validação para não deixar criar dois emails iguais
     def clean_email(self):
