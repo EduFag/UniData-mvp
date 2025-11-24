@@ -42,7 +42,7 @@ def enviar_transacao(funcao_contrato, signer, web3):
         signed_tx = signer.sign_transaction(tx)
 
         # 8. Enviar
-        tx_hash = web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        tx_hash = web3.eth.send_raw_transaction(signed_tx.raw_transaction)
 
         # 9. Esperar confirmação
         receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
@@ -50,8 +50,15 @@ def enviar_transacao(funcao_contrato, signer, web3):
         return {
             "tx_hash": tx_hash.hex(),
             "status": receipt.status,
-            "gasUsed": receipt.gasUsed,
+            "gasUsed": receipt.gasUsed, # <--- CORRIGIDO AQUI (mantido CamelCase conforme o erro pediu)
         }
 
     except Exception as e:
+        import traceback
+        print("="*30)
+        print("ERRO NA TRANSAÇÃO WEB3:")
+        print(f"Tipo: {type(e)}")
+        print(f"Erro: {e}")
+        traceback.print_exc() # Imprime a linha exata onde quebrou
+        print("="*30)
         return {"erro": str(e)}

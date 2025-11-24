@@ -1,6 +1,14 @@
 {
     "03937512012": {
-        "endereco": "0x9C719398601E6445B65bEb13E64c80F72Bf9F29d",
-        "chave_privada": "86e0d6caeecd99ac8a2679d204bff0d6104c6a1a58648bade2c6ee4a16a1eeef"
+        "endereco": "0x337fBc82F6ABCBbf06f4552c35d770C58b8711D8",
+        "chave_privada": "915e02331483f468002672aa5f010edd5756d4b9bde3b58f8638f1ce89eafc63"
+    },
+    "12345678910": {
+        "endereco": "0x617BB539d9D971eFa1135Ee5759EeFd66c3EC523",
+        "chave_privada": "4533e8345f4d89d426def37823148c9af5696137cce9bad03cd3ae0bcdd3b572"
+    },
+    "03937512011": {
+        "endereco": "0xF4150f300B699e23F96e07CBeAB8cCf19d157F30",
+        "chave_privada": "e813343f6c56d3f257c6a47b144181170708e0a3a920a1430a706d6690109788"
     }
 }

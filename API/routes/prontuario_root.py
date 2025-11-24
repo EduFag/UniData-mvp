@@ -23,7 +23,7 @@ def root():
     return {"status": "API Online", "servico": "Unidata"}
 
 
-@router.post("/gerar-carteira", status_code=201)
+@router.post("/gerar-carteira")
 def endpoint_gerar_carteira(dados: CarteiraRequest):
     try:
         criar_carteira(dados.cpf)
