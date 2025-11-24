@@ -85,10 +85,12 @@ def dashboard(request):
         return render(request, "app_profissional/erro_perfil.html", {
             "mensagem": "Este usuário não possui perfil de médico associado."
         })
+    lista_atendimentos = perfil.atendimentos.select_related('paciente', 'paciente__user').all()
 
     context = {
         "usuario": request.user,      # Dados de Login (Nome, Email)
-        "profissional": perfil        # Dados Médicos (CRM, ETH Address, CPF)
+        "profissional": perfil,       # Dados Médicos (CRM, ETH Address, CPF)
+        "meus_pacientes": lista_atendimentos
     }
     
     return render(request, "app_profissional/dashboard.html", context)

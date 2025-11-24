@@ -14,3 +14,16 @@ class Profissional(models.Model):
 
     def __str__(self):
         return f"Dr(a). {self.user.first_name} - {self.crm}"
+    
+class Atendimento(models.Model):
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, related_name='atendimentos')
+    paciente = models.ForeignKey('app_paciente.Paciente', on_delete=models.CASCADE, related_name='atendimentos')
+    
+    data_ultimo_acesso = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('profissional', 'paciente') 
+        ordering = ['-data_ultimo_acesso'] # Mostra os mais recentes primeiro
+
+    def __str__(self):
+        return f"{self.profissional} -> {self.paciente}"

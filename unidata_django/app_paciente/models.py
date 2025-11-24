@@ -12,12 +12,12 @@ class Paciente(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
 
     class Meta:
-        verbose_name = 'Pessoa'
-        verbose_name_plural = 'Pessoas'
+        verbose_name = 'Paciente'
+        verbose_name_plural = 'Pacientes'
         ordering = ['-criado_em']
 
     def __str__(self):
-        return f'{self.nome} ({self.cpf})'
+        return f'{self.user.get_full_name()} ({self.cpf})'
 
 
 
