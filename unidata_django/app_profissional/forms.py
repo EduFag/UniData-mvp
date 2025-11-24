@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
-
+ 
     def clean(self):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
@@ -28,7 +28,6 @@ class LoginForm(forms.Form):
             self.user = user
         
         return self.cleaned_data
-
 
 class CadastroForm(forms.Form):
     nome = forms.CharField(label="Nome Completo")

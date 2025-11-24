@@ -9,6 +9,10 @@ load_dotenv()  # carrega as variáveis do .env
 
 # Configurações globais
 web3 = get_provider()
+if not web3.is_connected():
+    raise ConnectionError("❌ Não foi possível conectar ao Anvil.")
+else:
+    print("✅ Conectado à blockchain:", os.getenv("PROVIDER_URL"))
 private_key = os.getenv("ANVIL_PRIVATE_KEY")
 api_signer = get_signer(private_key)
 

@@ -66,7 +66,7 @@ def login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             auth_login(request, form.user)
-            return redirect("dashboard") # Crie essa rota/view depois
+            return redirect("dashboard")
     else:
         form = LoginForm()
 

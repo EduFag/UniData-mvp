@@ -1,89 +1,87 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}UniData{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px 0;
         }
+
         .container {
             max-width: 900px;
         }
+
         .card {
             border: none;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+
         .card-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px 15px 0 0 !important;
             padding: 20px;
         }
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
         }
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #5568d3 0%, #653a8f 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+
         .table {
             background: white;
         }
+
         .badge {
             padding: 8px 12px;
             font-size: 0.9em;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         {% block navbar %}
-        <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background: transparent">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'pessoas:listar_pessoas' %}">
-                    <i class="bi bi-heart-pulse"></i> UniData
+                <a class="navbar-brand" href="{% url 'login_paciente' %}" style="color: #333; font-weight: bold">
+                    <span style="font-size: 1.5rem">🏥</span> UniData - Paciente
                 </a>
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="{% url 'pessoas:listar_pessoas' %}">
-                        <i class="bi bi-people"></i> Pessoas
+
+                <div class="navbar-nav ms-auto" style="display: flex; gap: 15px">
+                    <a class="nav-link" href="{% url 'login_paciente' %}" style="color: #555; text-decoration: none">
+                        Login
                     </a>
-                    <a class="nav-link" href="{% url 'pessoas:cadastrar_pessoa' %}">
-                        <i class="bi bi-person-plus"></i> Cadastrar
-                    </a>
-                    <a class="nav-link" href="{% url 'pessoas:gerar_carteira_form' %}">
-                        <i class="bi bi-wallet2"></i> Gerar Carteira
+                    <a class="nav-link" href="{% url 'cadastro_paciente' %}"
+                        style="color: #667eea; font-weight: bold; text-decoration: none">
+                        Cadastrar
                     </a>
                 </div>
             </div>
         </nav>
-        {% endblock %}
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block content %}
-        {% endblock %}
+        {% endblock %} {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %} {% endif %} {% block content %} {% endblock %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-
-
-
-
