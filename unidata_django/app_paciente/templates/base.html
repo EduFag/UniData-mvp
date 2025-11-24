@@ -46,24 +46,26 @@
 </head>
 <body>
     <div class="container">
+        {% block navbar %}
         <nav class="navbar navbar-expand-lg navbar-dark mb-4">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'pessoas:listar_pessoas' %}">
-                    <i class=""></i> UniData
+                    <i class="bi bi-heart-pulse"></i> UniData
                 </a>
                 <div class="navbar-nav ms-auto">
                     <a class="nav-link" href="{% url 'pessoas:listar_pessoas' %}">
-                        <i class=""></i> Pessoas
+                        <i class="bi bi-people"></i> Pessoas
                     </a>
                     <a class="nav-link" href="{% url 'pessoas:cadastrar_pessoa' %}">
-                        <i class=""></i> Cadastrar
+                        <i class="bi bi-person-plus"></i> Cadastrar
                     </a>
                     <a class="nav-link" href="{% url 'pessoas:gerar_carteira_form' %}">
-                        <i class=""></i> Gerar Carteira
+                        <i class="bi bi-wallet2"></i> Gerar Carteira
                     </a>
                 </div>
             </div>
         </nav>
+        {% endblock %}
 
         {% if messages %}
             {% for message in messages %}

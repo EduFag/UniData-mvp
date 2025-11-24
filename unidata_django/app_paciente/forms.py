@@ -48,5 +48,60 @@ class PessoaForm(forms.ModelForm):
         return cpf
 
 
+class PacienteLoginForm(forms.Form):
+    cpf = forms.CharField(
+        label="CPF",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite apenas números',
+            'maxlength': '11'
+        })
+    )
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        if cpf:
+            # Remove caracteres não numéricos
+            cpf = re.sub(r'\D', '', cpf)
+            if len(cpf) != 11:
+                raise forms.ValidationError('CPF deve conter 11 dígitos.')
+        return cpf
+
+
+class PacienteCadastroForm(forms.Form):
+    nome = forms.CharField(
+        label="Nome Completo",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nome completo'
+        })
+    )
+    cpf = forms.CharField(
+        label="CPF",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite apenas números',
+            'maxlength': '11'
+        })
+    )
+    email = forms.EmailField(
+        label="E-mail",
+        required=False,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'exemplo@email.com'
+        })
+    )
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        if cpf:
+            # Remove caracteres não numéricos
+            cpf = re.sub(r'\D', '', cpf)
+            if len(cpf) != 11:
+                raise forms.ValidationError('CPF deve conter 11 dígitos.')
+        return cpf
+
+
 
 
