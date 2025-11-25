@@ -1,6 +1,139 @@
-<h2>Cadastrar Profissional</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Cadastrar</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Médico - UniData</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #334155;
+        }
+
+        .register-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px; /* Um pouco mais largo que o login */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        p.desc {
+            color: #64748b;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Estilização dos campos do Django form.as_p */
+        form p {
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: midnightblue;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Help text (mensagens de ajuda do Django) */
+        .helptext {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #16a34a; /* Verde para diferenciar cadastro */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #15803d;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            color: #1e293b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div class="header">
+            <h2>Novo Profissional</h2>
+            <p class="desc">Preencha os dados para solicitar acesso ao sistema.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <button type="submit">Concluir Cadastro</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'login_profissional' %}">&larr; Voltar para Login</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -102,10 +102,10 @@
         </div>
         
         <p class="font-monospace mb-4 wallet-address">
-            {{ endereco }}
+            {{ endereco|truncatechars:30 }}
         </p>
         
-        <button class="btn btn-sm btn-light text-dark fw-bold rounded-pill px-3" onclick="navigator.clipboard.writeText('{{ endereco }}'); alert('Endereço copiado para a área de transferência!');">
+        <button class="btn btn-sm btn-light text-dark fw-bold rounded-pill px-3" style="border-radius: 6px !important;" onclick="navigator.clipboard.writeText('{{ endereco }}'); alert('Endereço copiado para a área de transferência!');">
             <i class="bi bi-copy"></i> Copiar
         </button>
     </div>

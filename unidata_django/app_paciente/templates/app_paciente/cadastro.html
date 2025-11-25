@@ -1,198 +1,202 @@
 {% extends 'base.html' %}
 
-{% block title %}Cadastro - Paciente - UniData{% endblock %}
+{% block title %}Criar Conta - UniData{% endblock %}
+
+{% block navbar %}
+<!-- Cabeçalho com Botão Voltar -->
+<div class="mobile-navbar d-flex justify-content-between align-items-center">
+    <a href="{% url 'login_paciente' %}" class="text-dark" style="font-size: 1.5rem;">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <h5 class="m-0 fw-bold" style="color: #1e293b;">Criar Conta</h5>
+    <div style="width: 24px;"></div> <!-- Espaçador para centralizar o título -->
+</div>
+{% endblock %}
 
 {% block content %}
+
 <style>
-    /* --- 1. Configurações Gerais e Variáveis --- */
-    :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --primary-color: #667eea;
-        --text-color: #333;
-        --bg-light: #f4f6f9;
-        --white: #ffffff;
-        --danger: #e74c3c;
-        --radius: 12px;
-        --shadow: 0 10px 30px rgba(0,0,0,0.1);
+    /* Reutilizando estilos do Login para consistência */
+    
+    .label-text {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 6px;
+        display: block;
+        margin-left: 5px;
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: var(--bg-light);
-        color: var(--text-color);
-        margin: 0; padding: 20px;
+    /* Input Group Customizado (Ícone + Campo) */
+    .input-wrapper {
+        background: white;
+        border-radius: 15px;
+        padding: 8px 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        border: 1px solid transparent;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
     }
 
-    /* --- 2. Container e Card Principal --- */
-    .main-container {
-        max-width: 800px;
-        margin: 40px auto;
-        background: var(--white);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        overflow: hidden;
+    .input-wrapper:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        transform: translateY(-1px);
     }
 
-    .card-header {
-        background: var(--primary-gradient);
-        color: var(--white);
-        padding: 25px;
-        text-align: center;
+    .input-icon {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        margin-right: 12px;
     }
 
-    .card-header h3 { margin: 0; font-weight: 600; font-size: 1.5rem; }
-    .card-body { padding: 30px; }
+    /* Remove bordas padrão do Django */
+    .app-input {
+        border: none;
+        outline: none;
+        width: 100%;
+        padding: 8px 0;
+        font-size: 0.95rem;
+        color: #334155;
+        background: transparent;
+    }
+    
+    .app-input::placeholder { color: #cbd5e1; }
 
-    /* --- 3. Estilização do Formulário --- */
-    .form-group { margin-bottom: 20px; }
-
-    label {
-        display: block; margin-bottom: 8px;
-        font-weight: 600; font-size: 0.9rem; color: #555;
+    /* Info Box estilo Mobile */
+    .info-box-mobile {
+        background-color: #eef2ff; 
+        border-radius: 12px;
+        padding: 15px;
+        margin: 20px 0;
+        font-size: 0.8rem;
+        color: #4f46e5;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
     }
 
-    input[type="text"], input[type="email"], input[type="password"] {
-        width: 100%; padding: 12px 15px;
-        border: 1px solid #ddd; border-radius: 8px;
-        font-size: 1rem; outline: none;
-        transition: border-color 0.3s, box-shadow 0.3s;
+    /* Botão Principal */
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 15px;
+        font-weight: 600;
+        width: 100%;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
-
-    input:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    /* Grid para colocar campos lado a lado */
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    @media (max-width: 600px) {
-        .form-row { grid-template-columns: 1fr; }
-    }
-
-    /* --- 4. Mensagens e Alertas --- */
-    .info-box {
-        background-color: #e3f2fd; border-left: 4px solid #2196f3;
-        color: #0d47a1; padding: 15px; border-radius: 4px;
-        margin-top: 20px; margin-bottom: 20px;
-        font-size: 0.9rem; line-height: 1.5;
-    }
+    
+    .btn-register:active { transform: scale(0.98); }
 
     .error-msg {
-        color: var(--danger); font-size: 0.85rem; margin-top: 5px; display: block;
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-left: 5px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        display: block;
     }
-
-    .helper-text {
-        font-size: 0.8rem; color: #888; margin-top: 5px; display: block;
-    }
-
-    /* --- 5. Botões --- */
-    .btn-container {
-        display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;
-    }
-
-    .btn {
-        padding: 12px 25px; border-radius: 50px; font-weight: 600;
-        text-decoration: none; cursor: pointer; transition: transform 0.2s;
-        border: none; font-size: 1rem;
-    }
-
-    .btn-primary { background: var(--primary-gradient); color: white; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
-
-    .btn-secondary { background: transparent; border: 1px solid #ccc; color: #666; }
-    .btn-secondary:hover { background: #f0f0f0; color: #333; }
 </style>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<div class="mt-2">
+    
+    <!-- Mensagens de Erro Gerais -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger border-0 shadow-sm" style="border-radius: 15px; font-size: 0.85rem;">
+            {% for error in form.non_field_errors %}
+                <div><i class="bi bi-exclamation-octagon-fill"></i> {{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-<div class="main-container">
-    <div class="card-header">
-        <h3><i class="bi bi-person-plus-fill"></i> Cadastro de Paciente</h3>
-    </div>
+    <form method="post">
+        {% csrf_token %}
 
-    <div class="card-body">
-        
-        <!-- Bloco de Erros Gerais (ex: Email já existe) -->
-        {% if form.non_field_errors %}
-            <div class="info-box" style="background-color: #fdecea; border-color: var(--danger); color: var(--danger);">
-                {% for error in form.non_field_errors %}
-                    <div>{{ error }}</div>
-                {% endfor %}
+        <!-- NOME -->
+        <div>
+            <label for="{{ form.nome.id_for_label }}" class="label-text">Nome Completo</label>
+            <div class="input-wrapper">
+                <i class="bi bi-person input-icon"></i>
+                {{ form.nome }}
             </div>
-        {% endif %}
+            {% if form.nome.errors %}
+                <span class="error-msg">{{ form.nome.errors.0 }}</span>
+            {% endif %}
+        </div>
 
-        <form method="post">
-            {% csrf_token %}
-
-            <!-- LINHA 1: NOME e CPF -->
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }} *</label>
-                    {{ form.nome }}
-                    {% if form.nome.errors %}
-                        <span class="error-msg">{{ form.nome.errors.0 }}</span>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.cpf.id_for_label }}">{{ form.cpf.label }} *</label>
-                    {{ form.cpf }}
-                    {% if form.cpf.errors %}
-                        <span class="error-msg">{{ form.cpf.errors.0 }}</span>
-                    {% endif %}
-                </div>
+        <!-- CPF -->
+        <div>
+            <label for="{{ form.cpf.id_for_label }}" class="label-text">CPF</label>
+            <div class="input-wrapper">
+                <i class="bi bi-person-vcard input-icon"></i>
+                {{ form.cpf }}
             </div>
+            {% if form.cpf.errors %}
+                <span class="error-msg">{{ form.cpf.errors.0 }}</span>
+            {% endif %}
+        </div>
 
-            <!-- LINHA 2: EMAIL -->
-            <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">{{ form.email.label }} *</label>
+        <!-- EMAIL -->
+        <div>
+            <label for="{{ form.email.id_for_label }}" class="label-text">E-mail</label>
+            <div class="input-wrapper">
+                <i class="bi bi-envelope input-icon"></i>
                 {{ form.email }}
-                <span class="helper-text">Será usado para o seu login.</span>
-                {% if form.email.errors %}
-                    <span class="error-msg">{{ form.email.errors.0 }}</span>
-                {% endif %}
             </div>
+            {% if form.email.errors %}
+                <span class="error-msg">{{ form.email.errors.0 }}</span>
+            {% endif %}
+        </div>
 
-            <!-- LINHA 3: SENHA -->
-            <div class="form-group">
-                <label for="{{ form.password.id_for_label }}">{{ form.password.label }} *</label>
+        <!-- SENHA -->
+        <div>
+            <label for="{{ form.password.id_for_label }}" class="label-text">Senha</label>
+            <div class="input-wrapper">
+                <i class="bi bi-lock input-icon"></i>
                 {{ form.password }}
-                <span class="helper-text">Crie uma senha forte para proteger seu prontuário.</span>
-                {% if form.password.errors %}
-                    <span class="error-msg">{{ form.password.errors.0 }}</span>
-                {% endif %}
             </div>
+            {% if form.password.errors %}
+                <span class="error-msg">{{ form.password.errors.0 }}</span>
+            {% endif %}
+        </div>
 
-            <!-- INFO BOX -->
-            <div class="info-box">
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <i class="bi bi-shield-lock-fill" style="font-size: 1.5rem;"></i>
-                    <div>
-                        <strong>Segurança Blockchain:</strong> 
-                        Ao finalizar, criaremos uma carteira digital exclusiva para você. 
-                        Seus dados médicos só poderão ser acessados com sua permissão.
-                    </div>
-                </div>
+        <!-- Aviso Blockchain -->
+        <div class="info-box-mobile">
+            <i class="bi bi-shield-check fs-5"></i>
+            <div>
+                <strong>Segurança Blockchain</strong><br>
+                <p>Ao finalizar, criaremos uma carteira digital exclusiva para você. Seus dados médicos só poderão ser acessados com sua permissão.</p>
             </div>
+        </div>
 
-            <!-- BOTÕES -->
-            <div class="btn-container">
-                <a href="{% url 'login_paciente' %}" class="btn btn-secondary">
-                    Já tenho conta
-                </a>
-                <button type="submit" class="btn btn-primary">
-                    Finalizar Cadastro <i class="bi bi-arrow-right"></i>
-                </button>
-            </div>
+        <!-- Botão -->
+        <div style="margin-bottom: 40px;">
+            <button type="submit" class="btn-register">
+                Confirmar Cadastro <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+        </div>
 
-        </form>
-    </div>
+    </form>
 </div>
+
+<!-- Script para estilizar inputs do Django -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.classList.add('app-input');
+            // Adiciona placeholders inteligentes
+            if(input.name === 'nome') input.placeholder = "Seu nome completo aqui";
+            if(input.name === 'cpf') input.placeholder = "00000000000";
+            if(input.name === 'email') input.placeholder = "seu@email.com";
+            if(input.name === 'password') input.placeholder = "Mínimo 6 caracteres";
+        });
+    });
+</script>
+
 {% endblock %}

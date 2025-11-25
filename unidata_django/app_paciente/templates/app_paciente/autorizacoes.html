@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Permissões - UniData{% endblock %}
+
+{% block navbar %}
+<div class="mobile-navbar d-flex justify-content-between align-items-center">
+    <div>
+        <h5 class="m-0 fw-bold"><i class="bi bi-shield-lock-fill"></i> Acesso</h5>
+    </div>
+    <a href="{% url 'dashboard_paciente' %}" class="text-white" style="font-size: 1.2rem;">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* --- Estilos da Barra de Busca --- */
+    .search-container {
+        background: white;
+        border-radius: 12px;
+        padding: 8px 15px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+        margin-top: 10px;
+        border: 1px solid #f1f5f9;
+    }
+    
+    .search-input {
+        border: none;
+        outline: none;
+        width: 100%;
+        margin-left: 10px;
+        color: #334155;
+        font-size: 0.95rem;
+    }
+
+    .search-btn {
+        background: none; border: none; color: #667eea; padding: 0;
+    }
+
+    /* --- Estilos do Card Médico --- */
+    .doctor-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        border: 1px solid #f1f5f9;
+    }
+
+    .doctor-info h6 {
+        margin: 0;
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 0.95rem;
+    }
+
+    .doctor-info small {
+        color: #64748b;
+        font-size: 0.8rem;
+    }
+
+    .badge-crm {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-family: monospace;
+    }
+
+    /* --- Botões Toggle --- */
+    .btn-toggle {
+        border: none;
+        border-radius: 30px;
+        padding: 8px 14px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .btn-off { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+    .btn-off:hover { background: #e2e8f0; color: #1e293b; }
+
+    .btn-on { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .btn-on:hover { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+    
+    .btn-on:hover span { display: none; }
+    .btn-on:hover:after { content: "Revogar"; }
+</style>
+
+<form method="GET" action="{% url 'gerenciar_autorizacoes' %}">
+    <div class="search-container">
+        <button type="submit" class="search-btn"><i class="bi bi-search"></i></button>
+        
+        <input type="text" name="q" class="search-input" 
+               placeholder="Digite o CRM do médico..." 
+               value="{{ query_atual|default:'' }}">
+               
+        {% if query_atual %}
+            <a href="{% url 'gerenciar_autorizacoes' %}" class="text-muted ms-2" style="text-decoration: none;">
+                <i class="bi bi-x-circle-fill"></i>
+            </a>
+        {% endif %}
+    </div>
+</form>
+
+<h6 class="text-muted text-uppercase mb-3 ms-1" style="font-size: 0.75rem; letter-spacing: 1px;">
+    {{ titulo }}
+</h6>
+
+<div class="mb-4">
+    {% for item in lista_medicos %}
+    <div class="doctor-card">
+        
+        <div class="d-flex align-items-center">
+            <div class="doctor-info">
+                <h6>Dr(a). {{ item.obj.user.first_name }}</h6>
+                <span class="badge-crm">CRM: {{ item.obj.crm }}</span>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="medico_id" value="{{ item.obj.id }}">
+            
+            {% if item.tem_acesso %}
+                <input type="hidden" name="acao" value="revogar">
+                <button type="submit" class="btn-toggle btn-on" style="border-radius: 6px !important;">
+                    <i class="bi bi-check-circle-fill"></i> <span>Ativo</span>
+                </button>
+            {% else %}
+                <input type="hidden" name="acao" value="autorizar">
+                <button type="submit" class="btn-toggle btn-off" style="border-radius: 6px !important;">
+                    Autorizar
+                </button>
+            {% endif %}
+        </form>
+    </div>
+    {% empty %}
+        <div class="text-center mt-5 text-muted">
+            {% if query_atual %}
+                <i class="bi bi-search fs-1 opacity-50"></i>
+                <p class="mt-2">Nenhum médico encontrado com esse CRM.</p>
+            {% else %}
+                <div class="opacity-50 mb-3"><i class="bi bi-shield-lock fs-1"></i></div>
+                <p>Você ainda não autorizou nenhum médico.</p>
+                <p class="small">Use a busca acima para encontrar um profissional.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<div style="height: 60px;"></div>
+
+{% endblock %}

@@ -2,12 +2,67 @@
 <html>
 <head>
     <title>Bem-vindo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f5f9;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 100px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-login {
+        background-color: midnightblue;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 15px;
+        font-weight: 600;
+        width: 100%;
+        font-size: 1rem;
+        margin-top: 10px;
+        transition: transform 0.2s;
+        text-decoration: none;
+        text-align: center;
+        }
+
+        .btn-login:active {
+        transform: scale(0.98);
+        }
+    </style>
 </head>
 <body>
-    <h1>Escolha seu acesso</h1>
+    <div class="container">
+        <h1><i class="bi bi-heart-pulse-fill"></i> Unidata MVP</h1>
 
-    <a href="/medico/login/">Sou Profissional de Saúde</a>
-    <br><br>
-    <a href="/paciente/login/">Sou Paciente</a>
+        <h2>Escolha seu acesso:</h2>
+
+        <div class="options">
+            <a href="/medico/login/" class="btn-login">Sou Profissional de Saúde</a>
+            <a href="/paciente/login/" class="btn-login">Sou Paciente</a>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -1,8 +1,142 @@
-<h2>Login</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Médico - UniData</title>
+    <style>
+        /* --- ESTILO CORPORATIVO (AZUL) --- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #334155;
+        }
 
-<a href="/medico/cadastro/">Cadastre-se</a>
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        /* --- FORMULÁRIO --- */
+        form p {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        /* Labels */
+        form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        /* Inputs (Personalizando o {{ form.as_p }}) */
+        form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box; /* Importante para padding não estourar */
+            transition: border-color 0.2s;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: midnightblue;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Botão Principal */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: midnightblue;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #191970c8;
+        }
+
+        /* Link de Cadastro */
+        .footer-link {
+            margin-top: 20px;
+            display: block;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .footer-link a {
+            color: midnightblue;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Lista de Erros do Django */
+        .errorlist {
+            color: #dc2626;
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Portal Médico</h2>
+        <span class="subtitle">Acesse sua conta para gerenciar pacientes</span>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <button type="submit">Entrar no Sistema</button>
+        </form>
+
+        <div class="footer-link">
+            Não possui acesso? <a href="{% url 'cadastro_profissional' %}">Cadastre-se aqui</a>
+        </div>
+    </div>
+
+</body>
+</html>
