@@ -22,12 +22,14 @@ API_URL = "http://localhost:8000"
 
 
 def cadastro(request):
-    """View para cadastrar um novo paciente."""
+    """View para cadastrar um novo paciente e registrá-lo na Blockchain."""
     if request.method == 'POST':
         form = CadastroForm(request.POST)
 
         if form.is_valid():
             dados = form.cleaned_data
+            
+            # 1. Cria o Usuário no Django (Auth)
             try:
                 user = User.objects.create_user(
                     username=dados["email"],
@@ -37,36 +39,52 @@ def cadastro(request):
                 )
             except Exception as e:
                 form.add_error(None, f"Erro ao criar usuário: {e}")
-                return render(request, "app_profissional/cadastro.html", {"form": form})
+                return render(request, "app_paciente/cadastro.html", {"form": form})
             
-            endpoint = f"{API_URL}/gerar-carteira"
+            # Preparação para chamadas na API
             payload = {"cpf": dados["cpf"]}
+            endereco_eth = None
 
             try:
-                resp = requests.post(endpoint, json=payload)
+                # 2. Gera a Carteira (API)
+                endpoint_gerar = f"{API_URL}/gerar-carteira"
+                resp_gerar = requests.post(endpoint_gerar, json=payload, timeout=10)
                 
-                # Aceita 200
-                if resp.status_code != 200:
-                    user.delete()
-                    print(f"Erro API: {resp.text}")
-                    form.add_error(None, "Erro ao gerar carteira na API.")
-                    return render(request, "app_profissional/cadastro.html", {"form": form})
+                if resp_gerar.status_code not in [200, 201]:
+                    user.delete() # Rollback: apaga usuário se falhar na API
+                    erro_msg = resp_gerar.json().get('detail') or resp_gerar.text
+                    form.add_error(None, f"Erro ao gerar carteira: {erro_msg}")
+                    return render(request, "app_paciente/cadastro.html", {"form": form})
 
-                carteira = resp.json()
+                carteira = resp_gerar.json()
                 endereco_eth = carteira.get("address") or carteira.get("endereco")
+
+                # 3. Registra na Blockchain (API -> Smart Contract)
+                endpoint_registro = f"{API_URL}/cadastrar-paciente"
+                resp_registro = requests.post(endpoint_registro, json=payload, timeout=30) # Timeout maior pois blockchain demora
+
+                if resp_registro.status_code != 200:
+                    user.delete() # Rollback
+                    erro_msg = resp_registro.json().get('detail') or "Erro desconhecido na blockchain"
+                    form.add_error(None, f"Falha no registro Blockchain: {erro_msg}")
+                    return render(request, "app_paciente/cadastro.html", {"form": form})
+
+            except requests.RequestException as e:
+                user.delete() # Rollback
+                form.add_error(None, f"A API Blockchain está offline ou instável: {str(e)}")
+                return render(request, "app_paciente/cadastro.html", {"form": form}) 
             
-            except requests.ConnectionError:
-                user.delete()
-                form.add_error(None, "A API Blockchain está offline.")
-                return render(request, "app_profissional/cadastro.html", {"form": form}) 
-            
+            # 4. Salva no Banco Local
             Paciente.objects.create(
-                user=user,  # <--- Liga ao usuário
+                user=user,
                 cpf=dados["cpf"],
                 endereco_eth=endereco_eth
             )
 
+            # Mensagem de sucesso
+            messages.success(request, "Cadastro realizado e identidade registrada na Blockchain!")
             return redirect('login_paciente')
+            
     else:
         form = CadastroForm()
     
