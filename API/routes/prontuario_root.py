@@ -4,6 +4,7 @@ from API.schemas.schemas import *
 from API.config import web3, api_signer, contrato
 from API.services.transaction_service import enviar_transacao
 from API.services.wallet_service import *
+from datetime import datetime
 
 def formatar_prontuario(dados_contrato: Any) -> dict:
     # Supondo que o contrato retorne algo como: (id, cid, paciente, medico, timestamp)
@@ -75,6 +76,35 @@ def endpoint_autorizar_profissional(dados: ProfissionalAuthRequest):
     return resultado
 
 
+@router.post("/set-consentimento", response_model=TxResponse)
+def endpoint_set_consentimento(dados: ConsentimentoRequest):
+    """
+    Permite que um paciente dê ou revogue permissão de acesso a um médico.
+    """
+    try:
+        # Monta a chamada para a função Solidity:
+        # setConsentimento(address paciente, address profissional, bool permitido)
+        func = contrato.functions.setConsentimento(
+            dados.address_paciente,
+            dados.address_profissional,
+            dados.consentimento
+        )
+
+        # Assina e envia usando a função que já corrigimos
+        resultado = enviar_transacao(func, api_signer, web3)
+        
+        # Verifica se houve erro na transação (ex: falta de gas, erro de lógica)
+        if "erro" in resultado:
+            raise HTTPException(status_code=500, detail=resultado["erro"])
+            
+        return resultado
+
+    except Exception as e:
+        # Captura erros gerais do Python/FastAPI
+        print(f"Erro ao definir consentimento: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/checar-consentimento")
 def endpoint_checar_consentimento(address_paciente: str, address_profissional: str):
     """ Verifica na blockchain se o médico tem permissão """
@@ -120,16 +150,36 @@ def endpoint_registrar_prontuario(dados: ProntuarioRequest):
 def listar_prontuarios(address_paciente: str):
     """
     Retorna a lista formatada de prontuários.
+    Lógica: Busca os IDs -> Itera sobre eles -> Busca os detalhes de cada um.
     """
     try:
-        # O contrato deve retornar uma lista de Structs ou Tuplas
-        raw_data = contrato.functions.listarProntuarios(address_paciente).call()
+        # 1. Busca apenas a lista de IDs (ex: [1, 5, 8])
+        lista_ids = contrato.functions.listarProntuarios(address_paciente).call()
         
-        # O Web3 retorna structs como tuplas. Precisamos converter para JSON.
-        prontuarios_formatados = [formatar_prontuario(p) for p in raw_data]
+        prontuarios_formatados = []
+
+        # 2. Para cada ID, buscamos os detalhes na blockchain
+        for id_prontuario in lista_ids:
+            # Retorno do contrato: (paciente, cid, updatedAt, ultimoAutor)
+            dados = contrato.functions.getProntuario(id_prontuario).call()
+            
+            # Montamos o objeto JSON
+            prontuarios_formatados.append({
+                "id": id_prontuario,
+                "paciente": dados[0],
+                "cid": dados[1],
+                "data_registro": datetime.fromtimestamp(dados[2]).strftime('%d/%m/%Y às %H:%M'),
+                "profissional": dados[3]
+            })
+        
+        # Inverte a lista para mostrar os mais recentes primeiro (opcional)
+        prontuarios_formatados.reverse()
         
         return {"prontuarios": prontuarios_formatados}
+
     except Exception as e:
+        import traceback
+        traceback.print_exc() # Isso ajuda a ver o erro no terminal da API se acontecer de novo
         raise HTTPException(status_code=500, detail=f"Erro ao ler blockchain: {str(e)}")
     
 
