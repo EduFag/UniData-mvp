@@ -1,80 +1,155 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard - Paciente - UniData{% endblock %}
+{% block title %}App Paciente{% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-dark mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'pessoas:dashboard' %}">
-            <i class="bi bi-heart-pulse"></i> UniData - Paciente
-        </a>
-        <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="{% url 'pessoas:dashboard' %}">
-                <i class="bi bi-person-circle"></i> Meu Perfil
-            </a>
-            <a class="nav-link" href="{% url 'pessoas:logout' %}">
-                <i class="bi bi-box-arrow-left"></i> Sair
-            </a>
-        </div>
+<style>
+    /* --- Tipografia e Cores Gerais --- */
+    .text-dark-blue {
+        color: #1e293b;
+    }
+    
+    .text-label {
+        opacity: 0.9;
+        font-size: 0.8rem;
+    }
+
+    .section-title {
+        font-size: 0.8rem; 
+        letter-spacing: 0.5px;
+    }
+
+    /* --- Widget da Carteira (Wallet) --- */
+    .wallet-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border-radius: 20px;
+        border: none;
+    }
+
+    .wallet-label {
+        opacity: 0.7;
+        letter-spacing: 1px;
+        font-size: 0.75rem;
+    }
+
+    .wallet-address {
+        font-size: 0.85rem;
+        word-break: break-all;
+        opacity: 0.9;
+    }
+
+    /* --- Itens da Lista de Informações --- */
+    .info-item {
+        background-color: white;
+        padding: 1rem; /* p-3 do bootstrap equivalente */
+        border-radius: 1rem; /* rounded-4 */
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075); /* shadow-sm */
+        display: flex;
+        align-items: center;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+    }
+
+    /* --- Ícones Coloridos --- */
+    .icon-box {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+
+    .icon-primary {
+        background-color: #f8f9fa; /* bg-light */
+        color: #667eea;
+    }
+
+    .icon-success {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+</style>
+
+<div class="mobile-navbar d-flex justify-content-between align-items-center">
+    <div>
+        <h5 class="m-0 fw-bold"><i class="bi bi-heart-pulse-fill"></i> UniData</h5>
+        <small class="text-label">Paciente</small>
     </div>
-</nav>
-{% endblock %}
-
-{% block content %}
-<div class="card">
-    <div class="card-header">
-        <h3 class="mb-0"><i class="bi bi-person-circle"></i> Meu Perfil</h3>
-    </div>
-    <div class="card-body p-4">
-        {% if nome %}
-        <div class="mb-4">
-            <h4>Bem-vindo, {{ nome }}!</h4>
-        </div>
-        {% endif %}
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="card bg-light">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-person-badge"></i> CPF</h5>
-                        <p class="card-text">{{ cpf }}</p>
-                    </div>
-                </div>
-            </div>
-
-            {% if email %}
-            <div class="col-md-6 mb-3">
-                <div class="card bg-light">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-envelope"></i> E-mail</h5>
-                        <p class="card-text">{{ email }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="card bg-primary text-white mb-4">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-wallet2"></i> Endereço da Carteira Blockchain</h5>
-                <p class="card-text font-monospace">{{ endereco }}</p>
-                <button class="btn btn-light btn-sm" onclick="navigator.clipboard.writeText('{{ endereco }}'); alert('Endereço copiado!');">
-                    <i class="bi bi-clipboard"></i> Copiar
-                </button>
-            </div>
-        </div>
-
-        <div class="alert alert-success">
-            <i class="bi bi-check-circle"></i>
-            <strong>Sucesso!</strong> Sua carteira blockchain foi criada e está pronta para uso.
-        </div>
-
-        <div class="d-flex gap-2">
-            <a href="{% url 'pessoas:logout' %}" class="btn btn-secondary">
-                <i class="bi bi-box-arrow-left"></i> Sair
-            </a>
-        </div>
-    </div>
+    <a href="{% url 'logout_paciente' %}" class="text-dark-blue" style="font-size: 1.5rem;">
+        <i class="bi bi-box-arrow-right"></i>
+    </a>
 </div>
 {% endblock %}
 
+{% block content %}
+
+<div class="mb-4 mt-2">
+    <h2 class="fw-bold text-dark-blue">{{ nome|default:"Paciente" }}</h2>
+    <p class="text-muted">Sua identidade digital segura.</p>
+</div>
+
+<div class="card text-white mb-4 shadow-sm wallet-card">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h6 class="text-uppercase mb-0 wallet-label">Sua Carteira de Saúde</h6>
+                <span style="font-size: 0.9rem; font-weight: bold;">Ethereum</span>
+            </div>
+            <i class="bi bi-wallet2 fs-3"></i>
+        </div>
+        
+        <p class="font-monospace mb-4 wallet-address">
+            {{ endereco }}
+        </p>
+        
+        <button class="btn btn-sm btn-light text-dark fw-bold rounded-pill px-3" onclick="navigator.clipboard.writeText('{{ endereco }}'); alert('Endereço copiado para a área de transferência!');">
+            <i class="bi bi-copy"></i> Copiar
+        </button>
+    </div>
+</div>
+
+<h6 class="fw-bold text-muted text-uppercase mb-3 ms-1 section-title">Informações Pessoais</h6>
+
+<div class="d-flex flex-column gap-3">
+    
+    <div class="info-item">
+        <div class="rounded-circle icon-box icon-primary">
+            <i class="bi bi-person-badge fs-5"></i>
+        </div>
+        <div>
+            <small class="text-muted d-block info-label">CPF Cadastrado</small>
+            <span class="fw-bold text-dark">{{ cpf }}</span>
+        </div>
+    </div>
+
+    {% if email %}
+    <div class="info-item">
+        <div class="rounded-circle icon-box icon-primary">
+            <i class="bi bi-envelope fs-5"></i>
+        </div>
+        <div style="overflow: hidden;"> 
+            <small class="text-muted d-block info-label">E-mail de Acesso</small>
+            <span class="fw-bold text-dark text-truncate d-block">{{ email }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="info-item">
+        <div class="rounded-circle icon-box icon-success">
+            <i class="bi bi-shield-check fs-5"></i>
+        </div>
+        <div>
+            <small class="text-muted d-block info-label">Status da Conta</small>
+            <span class="fw-bold text-success">Ativa na Blockchain</span>
+        </div>
+    </div>
+</div>
+
+<div class="nav">
+    
+</div>
+
+{% endblock %}

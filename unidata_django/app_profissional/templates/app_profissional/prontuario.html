@@ -44,20 +44,31 @@
                 
                 {% for registro in historico %}
                     <div class="card" style="border-left: 4px solid #3b82f6;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <small style="color: #64748b;">ID #{{ registro.id }}</small>
-                            <small style="color: #64748b;">{{ registro.data_registro|default:"Data desconhecida" }}</small>
-                        </div>
-                        <p style="margin: 0;"><strong>Conteúdo (CID/Resumo):</strong></p>
-                        <p style="background: #f8fafc; padding: 10px; border-radius: 4px; margin-top: 5px;">
-                            {{ registro.cid }}
-                        </p>
-                        <div style="margin-top: 10px; text-align: right;">
-                            <button onclick="editarRegistro('{{ registro.id }}', '{{ registro.cid|escapejs }}')" class="btn btn-blue" style="padding: 5px 10px; font-size: 12px;">
-                                Editar este registro
-                            </button>
-                        </div>
-                    </div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+        <div>
+            <span style="font-weight: bold; color: #1e293b;">Registro #{{ registro.id }}</span>
+            <br>
+            <small style="color: #64748b; font-size: 0.85em;">
+                Dr(a): <span style="font-family: monospace; background: #f1f5f9; padding: 2px 4px; border-radius: 4px;">{{ registro.profissional }}</span>
+            </small>
+        </div>
+        
+        <div style="text-align: right;">
+            <small style="color: #64748b; font-weight: bold;">📅 {{ registro.data_registro }}</small>
+        </div>
+    </div>
+
+    <p style="margin: 0; font-size: 0.9em; color: #475569; font-weight: 600;">Descrição / CID:</p>
+    <p style="background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 5px; border: 1px solid #e2e8f0; color: #334155;">
+        {{ registro.cid }}
+    </p>
+
+    <div style="margin-top: 10px; text-align: right;">
+        <button onclick="editarRegistro('{{ registro.id }}', '{{ registro.cid|escapejs }}')" class="btn btn-blue" style="padding: 6px 12px; font-size: 13px;">
+            Editar este registro
+        </button>
+    </div>
+</div>
                 {% empty %}
                     <div class="card" style="text-align: center; color: #94a3b8;">
                         Nenhum registro encontrado na blockchain.

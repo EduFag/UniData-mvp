@@ -62,8 +62,6 @@ def cadastro(request):
             Paciente.objects.create(
                 user=user,  # <--- Liga ao usuário
                 cpf=dados["cpf"],
-                telefone=dados["telefone"],
-                data_nascimento=dados["data_nascimento"],
                 endereco_eth=endereco_eth
             )
 
@@ -84,23 +82,24 @@ def login(request):
 
     return render(request, "app_paciente/login.html", {"form": form})
 
-login_required(login_url="login")
+login_required(login_url="login_paciente")
 def dashboard(request):
     """Dashboard do paciente - mostra informações da carteira."""
-    cpf = request.session.get('paciente_cpf')
-    endereco = request.session.get('paciente_endereco')
-    nome = request.session.get('paciente_nome', '')
-    email = request.session.get('paciente_email', '')
-    
-    if not cpf or not endereco:
-        messages.warning(request, "Por favor, faça login primeiro.")
+    # 1. Tenta pegar o perfil do paciente ligado ao usuário logado
+    try:
+        paciente = request.user.paciente
+    except AttributeError:
+        # Se o usuário logado for um médico ou admin (não tem perfil Paciente)
+        messages.error(request, "Este usuário não é um paciente.")
         return redirect('login_paciente')
-    
+
+    # 2. Monta o contexto pegando dados do Banco de Dados (via ORM)
     context = {
-        'cpf': cpf,
-        'endereco': endereco,
-        'nome': nome,
-        'email': email,
+        'cpf': paciente.cpf,
+        'endereco': paciente.endereco_eth,
+        'nome': request.user.first_name, # Nome vem do User
+        'email': request.user.email,     # Email vem do User
+        'paciente': paciente             # Passamos o objeto inteiro se precisar
     }
     
     return render(request, "app_paciente/dashboard.html", context)
@@ -109,5 +108,5 @@ def logout(request):
     """Logout do paciente - limpa a sessão."""
     auth_logout(request)
     messages.success(request, "Logout realizado com sucesso!")
-    return redirect('login')
+    return redirect('login_paciente')
 

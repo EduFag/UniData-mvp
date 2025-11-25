@@ -149,7 +149,7 @@ def ver_prontuario(request, paciente_id):
             }
 
             try:
-                resp_save = requests.post(f"{API_URL}/salvar-prontuario", json=payload, timeout=10)
+                resp_save = requests.post(f"{API_URL}/registrar-prontuario", json=payload, timeout=10)
                 
                 if resp_save.status_code == 200:
                     data = resp_save.json()
